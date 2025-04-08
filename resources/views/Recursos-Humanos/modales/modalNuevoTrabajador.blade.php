@@ -205,12 +205,27 @@
                                     <input type="date" class="form-control" id="fechaIngreso" name="fechaIngreso" required>
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label required-field">Área</label>
-                                    <select class="form-select" id="area" name="area" required>
-                                        <option value="">Seleccionar...</option>
-                                        <option value="nueva_area">+ Crear Nueva Área</option>
-                                    </select>
-                                </div>
+								<label class="form-label required-field">Área</label>
+								<select class="form-select" id="area" name="area" required onchange="mostrarInputNuevaArea(this)">
+								<option value="">Seleccionar...</option>
+								@foreach($areas as $area)
+								<option value="{{ $area->nombre }}">{{ $area->nombre }}</option>
+								@endforeach
+								<option value="nueva_area">+ Crear Nueva Área</option>
+								</select></div>
+								<div class="col-md-6" id="input-nueva-area" style="display: none;">
+								<label class="form-label">Nombre Nueva Área</label>
+								<input type="text" name="nueva_area" class="form-control" placeholder="Ingrese nueva área"></div>
+								<script>
+					function mostrarInputNuevaArea(select) {
+								if (select.value === 'nueva_area') {
+									document.getElementById('input-nueva-area').style.display = 'block';
+								} else {
+								document.getElementById('input-nueva-area').style.display = 'none';
+        }
+    }
+</script>
+
                                 <div class="col-md-6">
                                     <label class="form-label required-field">Cargo</label>
                                     <select class="form-select" id="cargo" name="cargo" required>

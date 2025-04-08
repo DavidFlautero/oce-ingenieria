@@ -61,4 +61,10 @@ Route::get('/empleados/{id}', [RRHHController::class, 'obtenerEmpleado']);
 
 // Ruta para guardar empleados (NUEVA)
 Route::post('/empleados/guardar', [RRHHController::class, 'guardarEmpleado'])->name('empleados.guardar');
+
+// Guardar Empleado (Formulario Modal)
+Route::post('/empleados/guardar', [RRHHController::class, 'guardarEmpleado'])->name('empleados.store');
+
+
+
 require __DIR__.'/auth.php';

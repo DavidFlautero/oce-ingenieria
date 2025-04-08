@@ -17,93 +17,84 @@ class RRHHController extends Controller
         return view('Recursos-Humanos.v.gestionTrabajadores');
     }
 
-  
+  //////////////////////////////////////////
+  /////////////////////////////////////////
+  ////GUARDAR EMPLEADO DESDE MODAL Y AREA//
+  public function guardarEmpleado(Request $request)
+{
+    $validated = $request->validate([
+        'nombre' => 'required|string|max:100',
+        'apellido' => 'required|string|max:100',
+        'dni' => 'required|numeric|digits_between:7,8|unique:empleados,dni',
+        'fechaNacimiento' => 'required|date|before:-18 years',
+        'grupoSanguineo' => 'required|in:A+,A-,B+,B-,AB+,AB-,O+,O-',
+        'telefono' => 'required|string|max:20',
+        'direccion' => 'required|string|max:255',
+        'fechaIngreso' => 'required|date|after_or_equal:2000-01-01',
+        'cargo' => 'required|string|max:100',
+
+        // Área: puede ser seleccionada o nueva
+        'area' => 'nullable|string|max:100',
+        'nueva_area' => 'nullable|string|max:100',
+
+        // Campos opcionales
+        'alergias' => 'nullable|string|max:500',
+        'cbu' => 'nullable|digits:22',
+        'tipoContrato' => 'nullable|in:planta,temporal,prueba',
+        'salarioBase' => 'nullable|numeric|min:0|max:1000000',
+        'bonificaciones' => 'nullable|numeric|min:0|max:1000000',
+    ]);
+
+    // Lógica para área
+    if ($request->filled('nueva_area')) {
+        $area = Area::create([
+            'nombre' => $request->nueva_area
+        ]);
+    } else {
+        $area = Area::where('nombre', $request->area)->first();
+    }
+
+    if (!$area) {
+        return back()->withErrors(['area' => 'Debe seleccionar un área o ingresar una nueva.']);
+    }
+
+    // Crear empleado
+    $empleado = new Empleado();
+    $empleado->nombre = $request->nombre;
+    $empleado->apellido = $request->apellido;
+    $empleado->dni = $request->dni;
+    $empleado->fechaNacimiento = $request->fechaNacimiento;
+    $empleado->grupoSanguineo = $request->grupoSanguineo;
+    $empleado->telefono = $request->telefono;
+    $empleado->direccion = $request->direccion;
+    $empleado->fechaIngreso = $request->fechaIngreso;
+    $empleado->cargo = $request->cargo;
+    $empleado->area_id = $area->id; // Relación correcta
+
+    // Opcionales
+    $empleado->alergias = $request->alergias;
+    $empleado->cbu = $request->cbu;
+    $empleado->tipoContrato = $request->tipoContrato;
+    $empleado->salarioBase = $request->salarioBase;
+    $empleado->bonificaciones = $request->bonificaciones;
+
+    $empleado->save();
+
+    return redirect()->route('empleados.index')->with('success', 'Empleado creado correctamente');
+}
+
     
 
 
 
-    public function guardarEmpleado(Request $request) 
-    {
-        // 1. Validaciones con campos obligatorios según requerimiento
-        $validated = $request->validate([
-            // Campos Obligatorios
-            'nombre' => 'required|string|max:100',
-            'apellido' => 'required|string|max:100',
-            'dni' => 'required|numeric|digits_between:7,8|unique:empleados,dni,'.$request->id,
-            'fechaNacimiento' => 'required|date|before:-18 years',
-            'grupoSanguineo' => 'required|in:A+,A-,B+,B-,AB+,AB-,O+,O-',
-            'telefono' => 'required|string|max:20',
-            'direccion' => 'required|string|max:255',
-            'fechaIngreso' => 'required|date|after_or_equal:2000-01-01',
-            'area' => 'required|string|max:100',
-            'cargo' => 'required|string|max:100',
-
-            // Campos Opcionales
-            'alergias' => 'nullable|string|max:500',
-            'dniFrente' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-            'dniDorso' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-            'cbu' => 'nullable|digits:22',
-            'registroConducir' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-            'vencimiento_registro' => 'nullable|date|after:today',
-            'certificadoMedico' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-            'otrosDocumentos.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-            'tipoContrato' => 'nullable|in:planta,temporal,prueba',
-            'salarioBase' => 'nullable|numeric|min:0|max:1000000',
-            'bonificaciones' => 'nullable|numeric|min:0|max:1000000',
-            'contactoEmergenciaNombre' => 'nullable|string|max:100',
-            'contactoEmergenciaTelefono' => 'nullable|string|max:20',
-            'contactoEmergenciaParentesco' => 'nullable|string|max:50',
-            'contactoEmergenciaObservaciones' => 'nullable|string|max:255'
-        ], [
-            // Mensajes personalizados para campos obligatorios
-            'required' => 'El campo :attribute es obligatorio',
-            'fechaNacimiento.before' => 'El empleado debe ser mayor de edad',
-            'dni.digits_between' => 'El DNI debe tener entre 7 y 8 dígitos',
-            'fechaIngreso.after_or_equal' => 'Fecha de ingreso no válida',
-            'cbu.digits' => 'El CBU debe tener exactamente 22 dígitos'
-        ]);
-
-        // 2. Procesamiento de archivos
-        $paths = [];
-        $fileFields = [
-            'dniFrente' => 'dni_frente_path',
-            'dniDorso' => 'dni_dorso_path',
-            'registroConducir' => 'registro_conducir_path',
-            'certificadoMedico' => 'certificado_medico_path'
-        ];
-
-        foreach ($fileFields as $formField => $dbField) {
-            if ($request->hasFile($formField)) {
-                $paths[$dbField] = $request->file($formField)->store("documentos/$formField");
-            }
-        }
-
-        // Procesar documentos múltiples
-        if ($request->hasFile('otrosDocumentos')) {
-            $otrosDocs = [];
-            foreach ($request->file('otrosDocumentos') as $file) {
-                $otrosDocs[] = $file->store('documentos/otros');
-            }
-            $paths['otros_documentos'] = json_encode($otrosDocs);
-        }
-
-        // 3. Guardar/Actualizar
-        $empleado = Empleado::updateOrCreate(
-            ['id' => $request->id],
-            array_merge($validated, $paths)
-        );
-
-        // 4. Respuesta
-        return response()->json([
-            'success' => true,
-            'data' => $empleado,
-            'received_data' => env('APP_DEBUG') ? $request->all() : null
-        ]);
-    }
+   
+	/////////////////////////////////////////
+	/////////////////////////////////////////
+	////Crea Area de Trabajo Desde Modal/////
+    ////Vamos la puta madre David no frenes!!	
 	
 	
-	
-	public function crearArea(Request $request)
+	public function crearArea(Request $request) 
 {
     $request->validate([
         'nombre' => 'required|string|unique:areas,nombre|max:255',

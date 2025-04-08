@@ -2,29 +2,39 @@
 
 // Guardar Empleado
 // En tu empleados.js - CORREGIDO Y PROBADO:
+
 async function guardarEmpleado(event) {
     event.preventDefault();
-    const form = document.getElementById('formEmpleado');
-    const formData = new FormData(form);
+    
+    // Debug: Ver datos antes de enviar
+    const formData = new FormData(document.getElementById('formEmpleado'));
+    console.log("Datos a enviar:", Array.from(formData.entries()));
 
     try {
-        const response = await fetch(form.action, {
+        const response = await fetch('/empleados/guardar', {
             method: 'POST',
             body: formData,
             headers: {
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
             }
         });
-        
-        if (!response.ok) throw new Error("Error al guardar");
-        const result = await response.json();
-        
-        if (result.success) {
-            window.location.reload(); // Recarga la página si todo sale bien
+
+        const data = await response.json();
+        console.log("Respuesta del servidor:", data);
+
+        if (!response.ok) {
+            throw new Error(data.message || 'Error en el servidor');
+        }
+
+        if (data.success) {
+            $('#modalGestionEmpleado').modal('hide');
+            setTimeout(() => window.location.reload(), 1000); // Espera 1s antes de recargar
+        } else {
+            throw new Error(data.error || 'Error al guardar');
         }
     } catch (error) {
-        console.error("Error:", error);
-        alert("Error al guardar: " + error.message);
+        console.error("Error completo:", error);
+        alert(`Error: ${error.message}`);
     }
 }
 
