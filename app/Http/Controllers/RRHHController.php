@@ -12,10 +12,16 @@ use App\Models\Documento;
 
 class RRHHController extends Controller
 {
-    public function index()
-    {
-        return view('Recursos-Humanos.v.gestionTrabajadores');
-    }
+   public function index()
+{
+    $areas = \App\Models\Area::all();
+    $empleados = \App\Models\Empleado::with('area')->get(); // Carga empleados con sus áreas
+    
+    return view('Recursos-Humanos.v.gestionTrabajadores', [
+        'areas' => $areas,
+        'empleados' => $empleados
+    ]);
+}
 
   //////////////////////////////////////////
   /////////////////////////////////////////
@@ -35,7 +41,7 @@ class RRHHController extends Controller
 
         // Área: puede ser seleccionada o nueva
         'area' => 'nullable|string|max:100',
-        'nueva_area' => 'nullable|string|max:100',
+        'nueva_area' => 'nullable|string|max:100|unique:areas,nombre',
 
         // Campos opcionales
         'alergias' => 'nullable|string|max:500',
@@ -45,18 +51,13 @@ class RRHHController extends Controller
         'bonificaciones' => 'nullable|numeric|min:0|max:1000000',
     ]);
 
-    // Lógica para área
-    if ($request->filled('nueva_area')) {
-        $area = Area::create([
-            'nombre' => $request->nueva_area
-        ]);
-    } else {
-        $area = Area::where('nombre', $request->area)->first();
-    }
+   // Lógica para área
+if ($request->filled('nueva_area')) {
+    $area = Area::firstOrCreate(['nombre' => $request->nueva_area]);
+} else {
+    $area = Area::where('nombre', $request->area)->firstOrFail();
+}
 
-    if (!$area) {
-        return back()->withErrors(['area' => 'Debe seleccionar un área o ingresar una nueva.']);
-    }
 
     // Crear empleado
     $empleado = new Empleado();

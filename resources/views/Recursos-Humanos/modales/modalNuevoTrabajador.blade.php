@@ -198,32 +198,50 @@
                         </div>
                         
                         <!-- Pestaña Datos Laborales -->
-                        <div class="tab-pane fade" id="datos-laborales" role="tabpanel">
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <label class="form-label required-field">Fecha Ingreso</label>
-                                    <input type="date" class="form-control" id="fechaIngreso" name="fechaIngreso" required>
-                                </div>
-                                <div class="col-md-6">
-								<label class="form-label required-field">Área</label>
-								<select class="form-select" id="area" name="area" required onchange="mostrarInputNuevaArea(this)">
-								<option value="">Seleccionar...</option>
-								@foreach($areas as $area)
-								<option value="{{ $area->nombre }}">{{ $area->nombre }}</option>
-								@endforeach
-								<option value="nueva_area">+ Crear Nueva Área</option>
-								</select></div>
-								<div class="col-md-6" id="input-nueva-area" style="display: none;">
-								<label class="form-label">Nombre Nueva Área</label>
-								<input type="text" name="nueva_area" class="form-control" placeholder="Ingrese nueva área"></div>
-								<script>
-					function mostrarInputNuevaArea(select) {
-								if (select.value === 'nueva_area') {
-									document.getElementById('input-nueva-area').style.display = 'block';
-								} else {
-								document.getElementById('input-nueva-area').style.display = 'none';
-        }
+                       <div class="tab-pane fade" id="datos-laborales" role="tabpanel">
+    <div class="row g-3">
+        <div class="col-md-6">
+            <label class="form-label required-field">Fecha Ingreso</label>
+            <input type="date" class="form-control" id="fechaIngreso" name="fechaIngreso" required
+                   min="{{ now()->subYears(10)->format('Y-m-d') }}"
+                   max="{{ now()->format('Y-m-d') }}">
+        </div>
+        
+        <div class="col-md-6">
+            <label class="form-label required-field">Área</label>
+            <select class="form-select" id="area" name="area" required onchange="mostrarInputNuevaArea(this)">
+                <option value="">Seleccionar...</option>
+                @foreach($areas as $area)
+                    <option value="{{ $area->id }}">{{ $area->nombre }}</option>
+                @endforeach
+                <option value="nueva_area">+ Crear Nueva Área</option>
+            </select>
+        </div>
+        
+        <div class="col-md-6" id="input-nueva-area" style="display: none;">
+            <label class="form-label required-field">Nombre Nueva Área</label>
+            <input type="text" name="nueva_area" class="form-control" 
+                   placeholder="Ingrese nueva área" id="nueva-area-input">
+            <small class="text-muted">El área se creará automáticamente al guardar</small>
+        </div>
+    </div>
+</div>
+
+<script>
+function mostrarInputNuevaArea(select) {
+    const inputContainer = document.getElementById('input-nueva-area');
+    const nuevaAreaInput = document.getElementById('nueva-area-input');
+    
+    if (select.value === 'nueva_area') {
+        inputContainer.style.display = 'block';
+        nuevaAreaInput.required = true;
+        // Reseteamos la selección del dropdown
+        select.selectedIndex = 0;
+    } else {
+        inputContainer.style.display = 'none';
+        nuevaAreaInput.required = false;
     }
+}
 </script>
 
                                 <div class="col-md-6">

@@ -24,13 +24,14 @@ Route::get('/forgot-password', function () {
 
 // Rutas protegidas
 Route::middleware(['auth'])->group(function () {
+    // Dashboard principal
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
 
-    Route::get('/Recursos-Humanos/v/', function () {
-        return view('Recursos-Humanos.v.gestionTrabajadores');
-    })->name('GestionTrabajadores');
+    // Gestión de empleados (CORREGIDA - usa el controlador)
+    Route::get('/recursos-humanos/gestion-trabajadores', [RRHHController::class, 'index'])
+        ->name('empleados.index');
 
     // Perfil de usuario
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -38,33 +39,26 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-
-
-
-// Ruta para obtener los CARGOS (puestos de trabajo) según el área seleccionada.
-// Esta ruta se va a consumir desde JavaScript mediante fetch()
-// El parámetro {area} es dinámico — viene del valor que el usuario selecciona en el select de Áreas.
-
-
-
-
-// Ruta para obtener las Áreas dinámicamente
-Route::get('/empleados/areas', [RRHHController::class, 'obtenerAreas']);
-
-// Devuelve los Cargos según el Área seleccionada
-Route::get('/empleados/cargos/{area}', [RRHHController::class, 'obtenerCargos']);
-
-Route::post('/empleados/crear-area', [RRHHController::class, 'crearArea']);
-
-// Ruta para obtener los datos de un empleado por su ID
-Route::get('/empleados/{id}', [RRHHController::class, 'obtenerEmpleado']);
-
-// Ruta para guardar empleados (NUEVA)
-Route::post('/empleados/guardar', [RRHHController::class, 'guardarEmpleado'])->name('empleados.guardar');
-
-// Guardar Empleado (Formulario Modal)
-Route::post('/empleados/guardar', [RRHHController::class, 'guardarEmpleado'])->name('empleados.store');
-
-
+// API endpoints para RRHH
+Route::middleware(['auth'])->group(function () {
+    // Obtener áreas (para selects)
+    Route::get('/empleados/areas', [RRHHController::class, 'obtenerAreas']);
+    
+    // Obtener cargos por área
+    Route::get('/empleados/cargos/{area}', [RRHHController::class, 'obtenerCargos']);
+    
+    // Crear nueva área
+    Route::post('/empleados/crear-area', [RRHHController::class, 'crearArea']);
+    
+    // Obtener datos de empleado
+    Route::get('/empleados/{id}', [RRHHController::class, 'obtenerEmpleado']);
+    
+    // Guardar empleado (POST)
+    Route::post('/empleados/guardar', [RRHHController::class, 'guardarEmpleado'])
+        ->name('empleados.guardar');
+    
+    // Subir documentos
+    Route::post('/empleados/subir-documento', [RRHHController::class, 'subirDocumento']);
+});
 
 require __DIR__.'/auth.php';
