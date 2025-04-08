@@ -59,5 +59,6 @@ Route::post('/empleados/crear-area', [RRHHController::class, 'crearArea']);
 // Ruta para obtener los datos de un empleado por su ID
 Route::get('/empleados/{id}', [RRHHController::class, 'obtenerEmpleado']);
 
-
+// Ruta para guardar empleados (NUEVA)
+Route::post('/empleados/guardar', [RRHHController::class, 'guardarEmpleado'])->name('empleados.guardar');
 require __DIR__.'/auth.php';

@@ -6,24 +6,32 @@ use Illuminate\Database\Eloquent\Model;
 
 class Empleado extends Model
 {
-    protected $fillable = [
-        'nombre',
-        'dni',
-        'fecha_nacimiento',
-        'grupo_sanguineo',
-        'telefono',
-        'direccion',
-        'alergias',
-        'fecha_ingreso',
-        'area',
-        'cargo',
-        'tipo_contrato',
-        'salario_base',
-        'bonificaciones',
-        'contacto_emergencia_nombre',
-        'contacto_emergencia_telefono',
-        'contacto_emergencia_parentesco'
-    ];
+ protected $fillable = [
+    'dni',
+    'apellido',
+    'nombre',
+    'fecha_nacimiento', // Se mapeará desde fechaNacimiento
+    'domicilio',        // Se mapeará desde direccion
+    'localidad',
+    'provincia',
+    'telefono',
+    'email',
+    'foto_dni_frente',  // Se mapeará desde dniFrente
+    'foto_dni_dorso',   // Se mapeará desde dniDorso
+    'fecha_ingreso',    // Se mapeará desde fechaIngreso
+    'activo',
+    'area_id',          // Se mapeará desde area
+    'cuitCuil',
+    'grupoSanguineo',
+    'alergias',
+    'cargo',
+    'relacionLaboral',
+    'salarioBase',
+    'bonificaciones',
+    'contactoEmergenciaNombre',
+    'contactoEmergenciaTelefono',
+    'contactoEmergenciaParentesco'
+];
 
     public function documentos()
     {

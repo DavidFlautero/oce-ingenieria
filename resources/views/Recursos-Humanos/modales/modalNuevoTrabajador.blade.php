@@ -1,4 +1,4 @@
-<!-- Modal Nuevo/Editar Empleado -->
+<!-- Modal Nuevo/Editar Empleado COMPLETO -->
 <div class="modal fade" id="modalGestionEmpleado" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
@@ -9,7 +9,7 @@
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
                 <form id="formEmpleado" onsubmit="guardarEmpleado(event)" method="POST" enctype="multipart/form-data">
                     @csrf
                     <input type="hidden" id="empleadoId" name="id">
@@ -39,6 +39,7 @@
                         <!-- Pestaña Datos Personales -->
                         <div class="tab-pane fade show active" id="datos-personales" role="tabpanel">
                             <div class="row g-3">
+                                <!-- Fila 1 -->
                                 <div class="col-md-6">
                                     <label class="form-label required-field">Nombre</label>
                                     <input type="text" class="form-control" id="nombre" name="nombre" required>
@@ -47,23 +48,26 @@
                                     <label class="form-label required-field">Apellido</label>
                                     <input type="text" class="form-control" id="apellido" name="apellido" required>
                                 </div>
+                                
+                                <!-- Fila 2 -->
                                 <div class="col-md-6">
                                     <label class="form-label required-field">DNI</label>
                                     <input type="text" class="form-control" id="dni" name="dni" required>
                                 </div>
-								<!-- Después del campo DNI -->
-							   <div class="col-md-6">
-							   <label class="form-label required-field">CUIT/CUIL</label>
-						       <input type="text" class="form-control" id="cuitCuil" name="cuitCuil" pattern="[0-9]{11}" placeholder="Ej: 20123456789" required>
-								<small class="text-muted">11 dígitos sin guiones</small>
-								</div>
+                                <div class="col-md-6">
+                                    <label class="form-label required-field">CUIT/CUIL</label>
+                                    <input type="text" class="form-control" id="cuitCuil" name="cuitCuil" pattern="[0-9]{11}" placeholder="Ej: 20123456789" required>
+                                    <small class="text-muted">11 dígitos sin guiones</small>
+                                </div>
+                                
+                                <!-- Fila 3 -->
                                 <div class="col-md-6">
                                     <label class="form-label required-field">Fecha Nacimiento</label>
                                     <input type="date" class="form-control" id="fechaNacimiento" name="fechaNacimiento" required>
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label">Grupo Sanguíneo</label>
-                                    <select class="form-select" id="grupoSanguineo" name="grupoSanguineo" required >
+                                    <label class="form-label required-field">Grupo Sanguíneo</label>
+                                    <select class="form-select" id="grupoSanguineo" name="grupoSanguineo" required>
                                         <option value="">Seleccionar...</option>
                                         <option value="A+">A+</option>
                                         <option value="A-">A-</option>
@@ -73,17 +77,69 @@
                                         <option value="AB-">AB-</option>
                                         <option value="O+">O+</option>
                                         <option value="O-">O-</option>
+                                        <option value="A Rh+">A Rh+</option>
+                                        <option value="A Rh-">A Rh-</option>
+                                        <option value="B Rh+">B Rh+</option>
+                                        <option value="B Rh-">B Rh-</option>
+                                        <option value="AB Rh+">AB Rh+</option>
+                                        <option value="AB Rh-">AB Rh-</option>
+                                        <option value="O Rh+">O Rh+</option>
+                                        <option value="O Rh-">O Rh-</option>
                                     </select>
+                                </div>
+                                
+                                <!-- Fila 4: Dirección y Teléfono -->
+                                <div class="col-md-6">
+                                    <label class="form-label required-field">Dirección</label>
+                                    <input type="text" class="form-control" id="direccion" name="direccion" required>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label required-field">Teléfono</label>
                                     <input type="tel" class="form-control" id="telefono" name="telefono" required>
                                 </div>
+                                
+                                <!-- Fila 5: Localidad y Provincia -->
                                 <div class="col-md-6">
-                                    <label class="form-label required-field">Dirección</label>
-                                    <input type="text" class="form-control" id="direccion" name="direccion" required>
+                                    <label class="form-label required-field">Localidad</label>
+                                    <input type="text" class="form-control" name="localidad" required>
                                 </div>
-                                <div class="col-md-12">
+                                <div class="col-md-6">
+                                    <label class="form-label required-field">Provincia</label>
+                                    <select class="form-select" name="provincia" required>
+                                        <option value="">Seleccionar...</option>
+                                        <option value="Buenos Aires">Buenos Aires</option>
+                                        <option value="CABA">Ciudad Autónoma de Buenos Aires</option>
+                                        <option value="Catamarca">Catamarca</option>
+                                        <option value="Chaco">Chaco</option>
+                                        <option value="Chubut">Chubut</option>
+                                        <option value="Córdoba">Córdoba</option>
+                                        <option value="Corrientes">Corrientes</option>
+                                        <option value="Entre Ríos">Entre Ríos</option>
+                                        <option value="Formosa">Formosa</option>
+                                        <option value="Jujuy">Jujuy</option>
+                                        <option value="La Pampa">La Pampa</option>
+                                        <option value="La Rioja">La Rioja</option>
+                                        <option value="Mendoza">Mendoza</option>
+                                        <option value="Misiones">Misiones</option>
+                                        <option value="Neuquén">Neuquén</option>
+                                        <option value="Río Negro">Río Negro</option>
+                                        <option value="Salta">Salta</option>
+                                        <option value="San Juan">San Juan</option>
+                                        <option value="San Luis">San Luis</option>
+                                        <option value="Santa Cruz">Santa Cruz</option>
+                                        <option value="Santa Fe">Santa Fe</option>
+                                        <option value="Santiago del Estero">Santiago del Estero</option>
+                                        <option value="Tierra del Fuego">Tierra del Fuego</option>
+                                        <option value="Tucumán">Tucumán</option>
+                                    </select>
+                                </div>
+                                
+                                <!-- Fila 6: Email y Alergias -->
+                                <div class="col-md-6">
+                                    <label class="form-label required-field">Email</label>
+                                    <input type="email" class="form-control" name="email" required>
+                                </div>
+                                <div class="col-md-6">
                                     <label class="form-label">Alergias/Enfermedades</label>
                                     <textarea class="form-control" id="alergias" name="alergias" rows="2"></textarea>
                                 </div>
@@ -99,19 +155,19 @@
                                 <!-- DNI -->
                                 <div class="col-md-6">
                                     <label class="form-label required-field">DNI (Frente)</label>
-                                    <input type="file" class="form-control" id="dniFrente" name="dniFrente" accept="image/*,application/pdf" >
+                                    <input type="file" class="form-control" id="dniFrente" name="dniFrente" accept="image/*,application/pdf">
                                     <small class="text-muted">Foto o escaneo frontal legible</small>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label required-field">DNI (Dorso)</label>
-                                    <input type="file" class="form-control" id="dniDorso" name="dniDorso" accept="image/*,application/pdf" >
+                                    <input type="file" class="form-control" id="dniDorso" name="dniDorso" accept="image/*,application/pdf">
                                     <small class="text-muted">Foto o escaneo dorso legible</small>
                                 </div>
                                 
                                 <!-- CBU -->
                                 <div class="col-md-6">
                                     <label class="form-label required-field">CBU/CVU</label>
-                                    <input type="text" class="form-control" id="cbu" name="cbu" pattern="[0-9]{22}" >
+                                    <input type="text" class="form-control" id="cbu" name="cbu" pattern="[0-9]{22}">
                                     <small class="text-muted">22 dígitos sin espacios</small>
                                 </div>
                                 
@@ -140,104 +196,78 @@
                                 </div>
                             </div>
                         </div>
-						
                         
                         <!-- Pestaña Datos Laborales -->
                         <div class="tab-pane fade" id="datos-laborales" role="tabpanel">
-    <div class="row g-3">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label required-field">Fecha Ingreso</label>
+                                    <input type="date" class="form-control" id="fechaIngreso" name="fechaIngreso" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label required-field">Área</label>
+                                    <select class="form-select" id="area" name="area" required>
+                                        <option value="">Seleccionar...</option>
+                                        <option value="nueva_area">+ Crear Nueva Área</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label required-field">Cargo</label>
+                                    <select class="form-select" id="cargo" name="cargo" required>
+                                        <option value="">Seleccionar...</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label required-field">Tipo Contrato</label>
+                                    <select class="form-select" id="relacionLaboral" name="relacionLaboral" required>
+                                        <option value="">Seleccionar...</option>
+                                        <option value="planta">Planta permanente</option>
+                                        <option value="temporal">Temporal</option>
+                                        <option value="prueba">Período de prueba</option>
+                                        <option value="monotributista">Monotributista</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label required-field">Salario Base</label>
+                                    <input type="number" class="form-control" id="salarioBase" name="salarioBase">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Bonificaciones</label>
+                                    <input type="number" class="form-control" id="bonificaciones" name="bonificaciones">
+                                </div>
+                            </div>
 
-        <div class="col-md-6">
-            <label class="form-label required-field">Fecha Ingreso</label>
-            <input type="date" class="form-control" id="fechaIngreso" name="fechaIngreso" required>
-        </div>
-
-        <div class="col-md-6">
-            <label class="form-label required-field">Área</label>
-            <select class="form-select" id="area" name="area" required>
-                <option value="">Seleccionar...</option>
-                <option value="nueva_area">+ Crear Nueva Área</option>
-            </select>
-        </div>
-
-        <div class="col-md-6">
-            <label class="form-label required-field">Área De Trabajo</label>
-            <select class="form-select" id="cargo" name="cargo" required>
-                <option value="">Seleccionar...</option>
-            </select>
-        </div>
-
-        <div class="col-md-6">
-            <label class="form-label required-field">Tipo Contrato</label>
-            <select class="form-select" id="relacionLaboral" name="relacionLaboral" required>
-                <option value="">Seleccionar...</option>
-                <option value="planta">Planta permanente</option>
-                <option value="temporal">Temporal</option>
-                <option value="prueba">Período de prueba</option>
-                <option value="monotributista">Monotributista</option>
-            </select>
-        </div>
-
-        <div class="col-md-6">
-            <label class="form-label required-field">Salario Base</label>
-            <input type="number" class="form-control" id="salarioBase" name="salarioBase">
-        </div>
-
-        <div class="col-md-6">
-            <label class="form-label">Bonificaciones</label>
-            <input type="number" class="form-control" id="bonificaciones" name="bonificaciones">
-        </div>
-
-    </div>
-
-    <!-- Bloque Monotributo oculto -->
-    <div id="seccionMonotributo" class="d-none mt-4">
-        <h5>Datos Monotributo</h5>
-        <div class="row g-3 mt-2">
-            <div class="col-md-6">
-                <label class="form-label">Estado Monotributo</label>
-                <select class="form-select" id="estadoMonotributo" name="estadoMonotributo">
-                    <option value="existente">Ya lo tiene</option>
-                    <option value="crear">Lo creará la empresa</option>
-                </select>
-            </div>
-
-            <div class="col-md-6">
-                <label class="form-label">Categoría</label>
-                <select class="form-select" id="categoriaMonotributo" name="categoriaMonotributo">
-                    <option value="">Seleccionar...</option>
-                    @foreach(range('A', 'K') as $letra)
-                        <option value="{{ $letra }}">{{ $letra }}</option>
-                    @endforeach
-                </select>
-            </div>
-
-            <div class="col-md-6">
-                <label class="form-label">Clave Fiscal Nivel 3</label>
-                <input type="text" class="form-control" id="claveFiscal" name="claveFiscal">
-            </div>
-
-            <div class="col-md-6">
-                <label class="form-label">Fecha Inscripción</label>
-                <input type="date" class="form-control" id="fechaInscripcion" name="fechaInscripcion">
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Script para mostrar/ocultar sección Monotributo -->
-@push('scripts')
-<script>
-    document.getElementById('relacionLaboral').addEventListener('change', function() {
-        const seccion = document.getElementById('seccionMonotributo');
-        if(this.value === 'monotributista') {
-            seccion.classList.remove('d-none');
-        } else {
-            seccion.classList.add('d-none');
-        }
-    });
-</script>
-@endpush
-
+                            <!-- Bloque Monotributo -->
+                            <div id="seccionMonotributo" class="d-none mt-4">
+                                <h5>Datos Monotributo</h5>
+                                <div class="row g-3 mt-2">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Estado Monotributo</label>
+                                        <select class="form-select" id="estadoMonotributo" name="estadoMonotributo">
+                                            <option value="existente">Ya lo tiene</option>
+                                            <option value="crear">Lo creará la empresa</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Categoría</label>
+                                        <select class="form-select" id="categoriaMonotributo" name="categoriaMonotributo">
+                                            <option value="">Seleccionar...</option>
+                                            @foreach(range('A', 'K') as $letra)
+                                                <option value="{{ $letra }}">{{ $letra }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Clave Fiscal Nivel 3</label>
+                                        <input type="text" class="form-control" id="claveFiscal" name="claveFiscal">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Fecha Inscripción</label>
+                                        <input type="date" class="form-control" id="fechaInscripcion" name="fechaInscripcion">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         
                         <!-- Pestaña Contacto Emergencia -->
                         <div class="tab-pane fade" id="emergencia" role="tabpanel">
@@ -276,76 +306,16 @@
     </div>
 </div>
 
-<!-- Los otros modals (Baja y Documento) permanecen iguales -->
-
-    <!-- Modal de Baja -->
-    <div class="modal fade" id="modalBaja" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title">
-                        <i class="fas fa-user-slash me-2"></i>Proceso de Baja
-                    </h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="formBaja">
-                        <input type="hidden" id="bajaEmpleadoId">
-                        <div class="mb-3">
-                            <label class="form-label">Tipo de Baja</label>
-                            <select class="form-select" id="tipoBaja" required>
-                                <option value="">Seleccionar...</option>
-                                <option value="renuncia">Renuncia Voluntaria</option>
-                                <option value="despido">Despido</option>
-                                <option value="licencia">Licencia Prolongada</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Fecha Efectiva</label>
-                            <input type="date" class="form-control" id="fechaBaja" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Motivo</label>
-                            <textarea class="form-control" id="motivoBaja" rows="3" required></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Documentación</label>
-                           <input type="file" class="form-control" name="documentacionBaja" required>
-							<small class="text-muted">Subir documento firmado (PDF)</small>
-                        </div>
-                        <div class="form-check mb-3">
-                            <input class="form-check-input" type="checkbox" id="checkEquipamiento" required>
-                            <label class="form-check-label">Todo el equipamiento ha sido devuelto</label>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" form="formBaja" class="btn btn-danger">
-                        <i class="fas fa-check-circle me-1"></i>Confirmar Baja
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal Visualización Documento -->
-    <div class="modal fade" id="modalDocumento" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Documento</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body text-center">
-                    <img src="https://via.placeholder.com/800x600?text=Documento+Empleado" class="img-fluid">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    <button type="button" class="btn btn-primary">
-                        <i class="fas fa-download me-1"></i>Descargar
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
+<!-- Script para Monotributo -->
+@push('scripts')
+<script>
+    document.getElementById('relacionLaboral').addEventListener('change', function() {
+        const seccion = document.getElementById('seccionMonotributo');
+        if(this.value === 'monotributista') {
+            seccion.classList.remove('d-none');
+        } else {
+            seccion.classList.add('d-none');
+        }
+    });
+</script>
+@endpush
