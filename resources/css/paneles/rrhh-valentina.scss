@@ -1,45 +1,19 @@
-/* Perfil de usuario en navbar */
-.user-image {
-    width: 35px;
-    height: 35px;
-    object-fit: cover;
-    margin-right: 5px;
-}
-
-/* Efecto hover para los dropdowns */
-.navbar-nav .dropdown-menu {
-    border: none;
-    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-}
-
-/* Encabezado del perfil desplegado */
-.user-header {
-    height: 175px;
-    padding: 10px;
-    text-align: center;
-    & > img {
-        width: 90px;
-        height: 90px;
-        border: 3px solid #fff;
-    }
-    p {
-        margin-top: 10px;
-        small {
-            display: block;
-            font-size: 12px;
-        }
-    }
-}
+@import 'navbar';
 
 /* Estilo nueva area */
 #input-nueva-area {
-  transition: all 0.3s ease-in-out;
-  opacity: 0;
-  height: 0;
-  overflow: hidden;
-}
-
-#input-nueva-area.show {
-  opacity: 1;
-  height: auto;
+    transition: all 0.3s ease-in-out;
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
+    padding: 0;
+    
+    &.show {
+        opacity: 1;
+        height: auto;
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 4px;
+        margin-top: 10px;
+    }
 }

@@ -61,4 +61,12 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/empleados/subir-documento', [RRHHController::class, 'subirDocumento']);
 });
 
+// Ruta para mostrar CBU enmascarado
+Route::get('/empleados/{empleado}/cbu', [CBUController::class, 'showMasked'])
+     ->name('empleados.cbu.masked');
+
+// Ruta para CBU completo (con autenticación)
+Route::post('/empleados/{empleado}/cbu/full', [CBUController::class, 'showFull'])
+     ->middleware(['auth', 'password.confirm']);
+
 require __DIR__.'/auth.php';

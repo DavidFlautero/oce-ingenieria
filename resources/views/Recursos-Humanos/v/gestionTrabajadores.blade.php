@@ -54,26 +54,33 @@
                                     <td>{{ $empleado->nombre }} {{ $empleado->apellido }}</td>
                                     <td>{{ $empleado->dni }}</td>
                                     <td>{{ $empleado->area->nombre }}</td>
-                                    <td>
-                                        @if($empleado->cbu)
-                                            <span class="cbu-value" data-id="{{ $empleado->id }}">
-                                                {{ $empleado->cbu_masked ?: '•••• •••• •••• •••• ••••' }}
-                                            </span>
-                                            <button class="btn btn-sm btn-outline-secondary btn-view-cbu ms-2"
-                                                    data-id="{{ $empleado->id }}"
-                                                    title="Ver CBU completo">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                            <button class="btn btn-sm btn-outline-primary btn-copy-cbu ms-1"
-                                                    data-id="{{ $empleado->id }}"
-                                                    title="Copiar CBU"
-                                                    style="display: none;">
-                                                <i class="fas fa-copy"></i>
-                                            </button>
-                                        @else
-                                            <span class="text-muted">No registrado</span>
-                                        @endif
-                                    </td>
+                                   <td>
+    @if($empleado->cbu)
+        <div class="d-flex align-items-center">
+            <!-- CBU Enmascarado -->
+            <span id="cbu-masked-{{ $empleado->id }}" class="cbu-masked">
+                {{ $empleado->cbu_masked ?: '•••• •••• •••• •••• ••••' }}
+            </span>
+            
+            <!-- Botón Ver -->
+            <button class="btn btn-sm btn-outline-primary btn-view-cbu ms-2"
+                    data-id="{{ $empleado->id }}"
+                    title="Ver CBU completo">
+                <i class="fas fa-eye"></i>
+            </button>
+            
+            <!-- Botón Copiar (oculto inicialmente) -->
+            <button class="btn btn-sm btn-outline-success btn-copy-cbu ms-1"
+                    data-id="{{ $empleado->id }}"
+                    title="Copiar CBU"
+                    style="display: none;">
+                <i class="fas fa-copy"></i>
+            </button>
+        </div>
+    @else
+        <span class="text-muted">No registrado</span>
+    @endif
+</td>
                                     <td>
                                         <button class="btn btn-sm btn-info" data-id="{{ $empleado->id }}">
                                             <i class="fas fa-eye"></i>
@@ -102,6 +109,30 @@
         <a href="#" id="crearAreaInicial">Crear área inicial</a>
     </div>
 @endif
+
+<!-- Modal para Ver CBU Completo -->
+<div class="modal fade" id="cbuModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Ver CBU Completo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">Contraseña requerida</label>
+                    <input type="password" id="cbuPassword" class="form-control" 
+                           placeholder="Ingrese su contraseña">
+                </div>
+                <div id="cbuError" class="text-danger small mb-2" style="display: none;"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" id="confirmViewCBU" class="btn btn-primary">Ver CBU</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 @endsection
 
@@ -181,7 +212,7 @@
             if (password) {
                 try {
                     const response = await $.ajax({
-                        url: `/empleados/${empleadoId}/cbu`,
+                        url: `/empleados/${empleadoId}/cbu/full`,
                         method: 'POST',
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
@@ -191,7 +222,7 @@
                     });
 
                     if (response.success) {
-                        $(`.cbu-value[data-id="${empleadoId}"]`).text(response.full_cbu);
+                        $(`#cbu-masked-${empleadoId}`).text(response.full_cbu); 
                         btn.hide();
                         $(`.btn-copy-cbu[data-id="${empleadoId}"]`).show();
                         
