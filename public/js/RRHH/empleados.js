@@ -56,7 +56,7 @@ async function guardarEmpleado(event) {
         }
 
         if (data.success) {
-            $('#modalGestionEmpleado').modal('hide');
+            const modal = new bootstrap.Modal(document.getElementById('modalGestionEmpleado')); modal.hide();
             setTimeout(() => window.location.reload(), 1000);
             
             // Mostrar notificación de éxito
