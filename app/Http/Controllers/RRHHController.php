@@ -21,6 +21,13 @@ class RRHHController extends Controller
             'empleados' => $empleados
         ]);
     }
+	
+	 public function gestionTrabajadores()
+    {
+        $empleados = \App\Models\Empleado::all(); // O tu consulta específica
+    return view('Recursos-Humanos.v.gestionTrabajadores', compact('empleados'));
+		
+    }
 
     public function guardarEmpleado(Request $request)
     {
