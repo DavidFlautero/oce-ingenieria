@@ -24,11 +24,12 @@
                         <li class="nav-item" role="presentation">
                             <button class="nav-link active" id="datos-tab" data-bs-toggle="tab" data-bs-target="#datos-personales" type="button">Datos Personales</button>
                         </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="documentos-tab" data-bs-toggle="tab" data-bs-target="#documentacion" type="button">Documentación</button>
-                        </li>
+                      
                         <li class="nav-item" role="presentation">
                             <button class="nav-link" id="laboral-tab" data-bs-toggle="tab" data-bs-target="#datos-laborales" type="button">Datos Laborales</button>
+                        </li>
+						  <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="documentos-tab" data-bs-toggle="tab" data-bs-target="#documentacion" type="button">Documentación</button>
                         </li>
                         <li class="nav-item" role="presentation">
                             <button class="nav-link" id="emergencia-tab" data-bs-toggle="tab" data-bs-target="#emergencia" type="button">Contacto Emergencia</button>
@@ -39,7 +40,7 @@
                         <!-- Pestaña Datos Personales -->
                         <div class="tab-pane fade show active" id="datos-personales" role="tabpanel">
                             <div class="row g-3">
-                                <!-- Fila 1 -->
+                                <!-- Sección Identificación -->
                                 <div class="col-md-6">
                                     <label class="form-label required-field">Nombre</label>
                                     <input type="text" class="form-control" id="nombre" name="nombre" required>
@@ -48,26 +49,25 @@
                                     <label class="form-label required-field">Apellido</label>
                                     <input type="text" class="form-control" id="apellido" name="apellido" required>
                                 </div>
-                                
-                                <!-- Fila 2 -->
                                 <div class="col-md-6">
                                     <label class="form-label required-field">DNI</label>
                                     <input type="text" class="form-control" id="dni" name="dni" required>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label required-field">CUIT/CUIL</label>
-                                    <input type="text" class="form-control" id="cuitCuil" name="cuitCuil" pattern="[0-9]{11}" placeholder="Ej: 20123456789" required>
+                                    <input type="text" class="form-control" id="cuitCuil" name="cuit_cuil" pattern="[0-9]{11}" placeholder="Ej: 20123456789" required>
                                     <small class="text-muted">11 dígitos sin guiones</small>
                                 </div>
                                 
-                                <!-- Fila 3 -->
+                                <!-- Sección Datos Personales -->
                                 <div class="col-md-6">
                                     <label class="form-label required-field">Fecha Nacimiento</label>
-                                    <input type="date" class="form-control" id="fechaNacimiento" name="fechaNacimiento" required>
+                                    <input type="date" class="form-control" id="fechaNacimiento" name="fecha_nacimiento" placeholder="DD/MM/AAAA" 
+       pattern="\d{2}/\d{2}/\d{4}" required>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label required-field">Grupo Sanguíneo</label>
-                                    <select class="form-select" id="grupoSanguineo" name="grupoSanguineo" required>
+                                    <select class="form-select" id="grupoSanguineo" name="grupo_sanguineo" >
                                         <option value="">Seleccionar...</option>
                                         <option value="A+">A+</option>
                                         <option value="A-">A-</option>
@@ -87,21 +87,29 @@
                                         <option value="O Rh-">O Rh-</option>
                                     </select>
                                 </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Alergias/Enfermedades</label>
+                                    <textarea class="form-control" id="alergias" name="alergias" rows="2"></textarea>
+                                </div>
                                 
-                                <!-- Fila 4: Dirección y Teléfono -->
+                                <!-- Sección Contacto -->
+                                <div class="col-md-6">
+                                    <label class="form-label required-field">Teléfono/Celular</label>
+                                    <input type="tel" class="form-control" id="telefono" name="telefono" placeholder="1157633254"required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label required-field">Email</label>
+                                    <input type="email" class="form-control" name="email" placeholder="oce@gmail.com" >
+                                </div>
+                                
+                                <!-- Sección Domicilio -->
                                 <div class="col-md-6">
                                     <label class="form-label required-field">Dirección</label>
-                                    <input type="text" class="form-control" id="direccion" name="direccion" required>
+                                    <input type="text" class="form-control" id="direccion" name="direccion" placeholder="Olavarria 600" required>
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label required-field">Teléfono</label>
-                                    <input type="tel" class="form-control" id="telefono" name="telefono" required>
-                                </div>
-                                
-                                <!-- Fila 5: Localidad y Provincia -->
-                                <div class="col-md-6">
-                                    <label class="form-label required-field">Localidad</label>
-                                    <input type="text" class="form-control" name="localidad" required>
+                                    <label class="form-label required-field">Barrio/Partido</label>
+                                    <input type="text" class="form-control" name="localidad" placeholder="MonteGrande- Esteban Echeverria" required>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label required-field">Provincia</label>
@@ -133,16 +141,6 @@
                                         <option value="Tucumán">Tucumán</option>
                                     </select>
                                 </div>
-                                
-                                <!-- Fila 6: Email y Alergias -->
-                                <div class="col-md-6">
-                                    <label class="form-label required-field">Email</label>
-                                    <input type="email" class="form-control" name="email" required>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label">Alergias/Enfermedades</label>
-                                    <textarea class="form-control" id="alergias" name="alergias" rows="2"></textarea>
-                                </div>
                             </div>
                         </div>
                         
@@ -152,122 +150,87 @@
                                 <i class="fas fa-info-circle me-2"></i> Todos los documentos deben estar vigentes y ser claramente legibles
                             </div>
                             <div class="row g-3">
-                                <!-- DNI -->
+                                <!-- Documentos Obligatorios -->
                                 <div class="col-md-6">
                                     <label class="form-label required-field">DNI (Frente)</label>
-                                    <input type="file" class="form-control" id="dniFrente" name="dniFrente" accept="image/*,application/pdf">
+                                    <input type="file" class="form-control" id="dniFrente" name="foto_dni_frente" accept="image/*,application/pdf">
                                     <small class="text-muted">Foto o escaneo frontal legible</small>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label required-field">DNI (Dorso)</label>
-                                    <input type="file" class="form-control" id="dniDorso" name="dniDorso" accept="image/*,application/pdf">
+                                    <input type="file" class="form-control" id="dniDorso" name="foto_dni_dorso" accept="image/*,application/pdf">
                                     <small class="text-muted">Foto o escaneo dorso legible</small>
                                 </div>
-                                
-                                <!-- CBU -->
                                 <div class="col-md-6">
                                     <label class="form-label required-field">CBU/CVU</label>
                                     <input type="text" class="form-control" id="cbu" name="cbu" pattern="[0-9]{22}">
                                     <small class="text-muted">22 dígitos sin espacios</small>
                                 </div>
                                 
-                                <!-- Registro Conducir -->
+                                <!-- Documentos Opcionales -->
                                 <div class="col-md-6">
                                     <label class="form-label">Registro de Conducir</label>
                                     <div class="input-group mb-2">
-                                        <input type="file" class="form-control" id="registroConducir" name="registroConducir" accept="image/*,application/pdf">
-                                        <input type="date" class="form-control" id="vencimientoRegistro" name="vencimientoRegistro" placeholder="Vencimiento">
+                                        <input type="file" class="form-control" id="registroConducir" name="registro_conducir" accept="image/*,application/pdf">
+                                        <input type="date" class="form-control" id="vencimientoRegistro" name="vencimiento_registro" placeholder="Vencimiento">
                                     </div>
                                     <small class="text-muted">Opcional - Cargar si posee</small>
                                 </div>
-                                
-                                <!-- Certificado Médico -->
                                 <div class="col-md-6">
                                     <label class="form-label">Certificado Médico</label>
-                                    <input type="file" class="form-control" id="certificadoMedico" name="certificadoMedico" accept="image/*,application/pdf">
+                                    <input type="file" class="form-control" id="certificadoMedico" name="certificado_medico" accept="image/*,application/pdf">
                                     <small class="text-muted">Recomendado para roles de riesgo</small>
                                 </div>
-                                
-                                <!-- Otros documentos -->
                                 <div class="col-md-6">
                                     <label class="form-label">Otros Documentos</label>
-                                    <input type="file" class="form-control" id="otrosDocumentos" name="otrosDocumentos[]" multiple>
+                                    <input type="file" class="form-control" id="otrosDocumentos" name="otros_documentos[]" multiple>
                                     <small class="text-muted">Títulos, certificaciones, etc.</small>
                                 </div>
                             </div>
                         </div>
                         
                         <!-- Pestaña Datos Laborales -->
-                       <div class="tab-pane fade" id="datos-laborales" role="tabpanel">
-    <div class="row g-3">
-        <div class="col-md-6">
-            <label class="form-label required-field">Fecha Ingreso</label>
-            <input type="date" class="form-control" id="fechaIngreso" name="fechaIngreso" required
-                   min="{{ now()->subYears(10)->format('Y-m-d') }}"
-                   max="{{ now()->format('Y-m-d') }}">
-        </div>
-        
-        <div class="col-md-6">
-            <label class="form-label required-field">Área</label>
-            <select class="form-select" id="area" name="area" required onchange="mostrarInputNuevaArea(this)">
-                <option value="">Seleccionar...</option>
-                @foreach($areas as $area)
-                    <option value="{{ $area->id }}">{{ $area->nombre }}</option>
-                @endforeach
-                <option value="nueva_area">+ Crear Nueva Área</option>
-            </select>
-        </div>
-        
-        <div class="col-md-6" id="input-nueva-area" style="display: none;">
-            <label class="form-label required-field">Nombre Nueva Área</label>
-            <input type="text" name="nueva_area" class="form-control" 
-                   placeholder="Ingrese nueva área" id="nueva-area-input">
-            <small class="text-muted">El área se creará automáticamente al guardar</small>
-        </div>
-    </div>
-</div>
-
-<script>
-function mostrarInputNuevaArea(select) {
-    const inputContainer = document.getElementById('input-nueva-area');
-    const nuevaAreaInput = document.getElementById('nueva-area-input');
-    
-    if (select.value === 'nueva_area') {
-        inputContainer.style.display = 'block';
-        nuevaAreaInput.required = true;
-        // Reseteamos la selección del dropdown
-        select.selectedIndex = 0;
-    } else {
-        inputContainer.style.display = 'none';
-        nuevaAreaInput.required = false;
-    }
-}
-</script>
-
+                        <div class="tab-pane fade" id="datos-laborales" role="tabpanel">
+                            <div class="row g-3">
+                                <!-- Datos Básicos Laborales -->
                                 <div class="col-md-6">
-                                    <label class="form-label required-field">Cargo</label>
-                                    <select class="form-select" id="cargo" name="cargo" required>
-                                        <option value="">Seleccionar...</option>
-                                    </select>
+                                    <label class="form-label required-field">Fecha Ingreso</label>
+                                    <input type="date" class="form-control" id="fechaIngreso" name="fecha_ingreso" required
+                                           min="{{ now()->subYears(10)->format('Y-m-d') }}"
+                                           max="{{ now()->format('Y-m-d') }}">
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label required-field">Tipo Contrato</label>
-                                    <select class="form-select" id="relacionLaboral" name="relacionLaboral" required>
+                                    <label class="form-label required-field">Área</label>
+                                    <select class="form-select" id="area" name="area_id" required onchange="mostrarInputNuevaArea(this)">
+                                        <option value="">Seleccionar...</option>
+                                        @foreach($areas as $area)
+                                            <option value="{{ $area->id }}">{{ $area->nombre }}</option>
+                                        @endforeach
+                                        <option value="nueva_area">+ Crear Nueva Área</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6" id="input-nueva-area" style="display: none;">
+                                    <label class="form-label required-field">Nombre Nueva Área</label>
+                                    <input type="text" name="nueva_area" class="form-control" 
+                                           placeholder="Ingrese nueva área" id="nueva-area-input">
+                                    <small class="text-muted">El área se creará automáticamente al guardar</small>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label required-field">Condicion Laboral</label>
+                                    <select class="form-select" id="relacionLaboral" name="relacion_laboral" required>
                                         <option value="">Seleccionar...</option>
                                         <option value="planta">Planta permanente</option>
-                                        <option value="temporal">Temporal</option>
                                         <option value="prueba">Período de prueba</option>
                                         <option value="monotributista">Monotributista</option>
                                     </select>
                                 </div>
+                                
+                                <!-- Datos Remunerativos -->
                                 <div class="col-md-6">
                                     <label class="form-label required-field">Salario Base</label>
-                                    <input type="number" class="form-control" id="salarioBase" name="salarioBase">
+                                    <input type="number" class="form-control" id="salarioBase" name="salario_base">
                                 </div>
-                                <div class="col-md-6">
-                                    <label class="form-label">Bonificaciones</label>
-                                    <input type="number" class="form-control" id="bonificaciones" name="bonificaciones">
-                                </div>
+                               
                             </div>
 
                             <!-- Bloque Monotributo -->
@@ -276,14 +239,14 @@ function mostrarInputNuevaArea(select) {
                                 <div class="row g-3 mt-2">
                                     <div class="col-md-6">
                                         <label class="form-label">Estado Monotributo</label>
-                                        <select class="form-select" id="estadoMonotributo" name="estadoMonotributo">
-                                            <option value="existente">Ya lo tiene</option>
-                                            <option value="crear">Lo creará la empresa</option>
+                                        <select class="form-select" id="estadoMonotributo" name="estado_monotributo">
+                                            <option value="existente">Monotributista ( Ajeno )</option> 
+                                            <option value="crear">Monotributista ( Gestionado por OCE )</option>
                                         </select>
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Categoría</label>
-                                        <select class="form-select" id="categoriaMonotributo" name="categoriaMonotributo">
+                                        <select class="form-select" id="categoria_monotributo" name="categoria_monotributo">
                                             <option value="">Seleccionar...</option>
                                             @foreach(range('A', 'K') as $letra)
                                                 <option value="{{ $letra }}">{{ $letra }}</option>
@@ -291,12 +254,12 @@ function mostrarInputNuevaArea(select) {
                                         </select>
                                     </div>
                                     <div class="col-md-6">
-                                        <label class="form-label">Clave Fiscal Nivel 3</label>
-                                        <input type="text" class="form-control" id="claveFiscal" name="claveFiscal">
+                                        <label class="form-label">Clave Fiscal </label>
+                                        <input type="text" class="form-control" id="claveFiscal" name="clave_fiscal" placeholder="Opcional(Si es Ajeno)">
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Fecha Inscripción</label>
-                                        <input type="date" class="form-control" id="fechaInscripcion" name="fechaInscripcion">
+                                        <input type="date" class="form-control" id="fechaInscripcion" name="fecha_inscripcion_monotributo">
                                     </div>
                                 </div>
                             </div>
@@ -304,26 +267,26 @@ function mostrarInputNuevaArea(select) {
                         
                         <!-- Pestaña Contacto Emergencia -->
                         <div class="tab-pane fade" id="emergencia" role="tabpanel">
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <label class="form-label required-field">Nombre Contacto</label>
-                                    <input type="text" class="form-control" id="contactoEmergenciaNombre" name="contactoEmergenciaNombre" required>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label required-field">Teléfono Contacto</label>
-                                    <input type="tel" class="form-control" id="contactoEmergenciaTelefono" name="contactoEmergenciaTelefono" required>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label">Parentesco</label>
-                                    <input type="text" class="form-control" id="contactoEmergenciaParentesco" name="contactoEmergenciaParentesco">
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label">Otras Observaciones</label>
-                                    <input type="text" class="form-control" id="contactoEmergenciaObservaciones" name="contactoEmergenciaObservaciones">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+    <div class="row g-3">
+        <div class="col-md-6">
+            <label class="form-label required-field">Nombre Contacto</label>
+            <input type="text" class="form-control" id="contacto_emergencia_nombre" name="contacto_emergencia_nombre">
+        </div>
+        <div class="col-md-6">
+            <label class="form-label required-field">Teléfono Contacto</label>
+            <input type="tel" class="form-control" id="contacto_emergencia_telefono" name="contacto_emergencia_telefono">
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Parentesco</label>
+            <input type="text" class="form-control" id="contacto_emergencia_parentesco" name="contacto_emergencia_parentesco">
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Otras Observaciones</label>
+            <input type="text" class="form-control" id="contacto_emergencia_observaciones" name="contacto_emergencia_observaciones">
+        </div>
+    </div>
+</div>
+                            
                 </form>
             </div>
             <div class="modal-footer">
@@ -350,5 +313,47 @@ function mostrarInputNuevaArea(select) {
             seccion.classList.add('d-none');
         }
     });
+    
+  function mostrarInputNuevaArea(select) {
+    const inputContainer = document.getElementById('input-nueva-area');
+    const nuevaAreaInput = document.getElementById('nueva-area-input');
+    
+    // Verificamos que los elementos existan
+    if (!inputContainer || !nuevaAreaInput) return;
+    
+    if (select.value === 'nueva_area') {
+        // 1. Mostrar con animación (usando clase CSS)
+        inputContainer.classList.add('show');
+        // 2. Campo requerido
+        nuevaAreaInput.required = true;
+        // 3. Autofocus para mejor UX
+        nuevaAreaInput.focus();
+    } else {
+        // 1. Ocultar con animación
+        inputContainer.classList.remove('show');
+        // 2. Campo no requerido
+        nuevaAreaInput.required = false;
+    }
+}
+</script>
+<!-- Manejo de Fecha formato DIA/MES AÑO -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('input[type="date"]').forEach(input => {
+        input.addEventListener('focus', (e) => {
+            if (e.target.value) {
+                const [year, month, day] = e.target.value.split('-');
+                e.target.value = `${day}/${month}/${year}`;
+            }
+        });
+
+        input.addEventListener('blur', (e) => {
+            if (e.target.value.includes('/')) {
+                const [day, month, year] = e.target.value.split('/');
+                e.target.value = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+            }
+        });
+    });
+});
 </script>
 @endpush

@@ -30,3 +30,16 @@
         }
     }
 }
+
+/* Estilo nueva area */
+#input-nueva-area {
+  transition: all 0.3s ease-in-out;
+  opacity: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+#input-nueva-area.show {
+  opacity: 1;
+  height: auto;
+}
