@@ -72,6 +72,13 @@ return [
             'days' => env('LOG_DAILY_DAYS', 14),
             'replace_placeholders' => true,
         ],
+		
+		 'cbu_access' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/cbu_access.log'),
+            'level' => 'info',
+            'days' => 30,
+        ],
 
         'slack' => [
             'driver' => 'slack',

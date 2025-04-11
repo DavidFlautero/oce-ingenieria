@@ -104,7 +104,31 @@ class RRHHController extends Controller
             'empleado' => $empleado
         ]);
     }
+// El método debe estar así:
+public function manejarCbu(Request $request, $id)
+{
+    $request->validate([
+        'action' => 'required|in:masked,full',
+        'password' => 'required_if:action,full'
+    ]);
 
+    $empleado = Empleado::findOrFail($id);
+
+    if ($request->action == 'masked') {
+        return response()->json([
+            'cbu' => $empleado->cbu_masked
+        ]);
+    }
+
+    if (!Hash::check($request->password, auth()->user()->password)) {
+        return response()->json(['error' => 'Contraseña incorrecta'], 403);
+    }
+
+    return response()->json([
+        'cbu' => $empleado->cbu,
+        'masked_cbu' => $empleado->cbu_masked
+    ]);
+}
     private function subirDocumentos($empleado, $request)
     {
         $documentos = [

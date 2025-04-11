@@ -45,13 +45,18 @@ public function setCbuAttribute($value)
 
 public function getCbuAttribute($value)
 {
-    return $value ? Crypt::decryptString($value) : null;
+    try {
+        return $value ? Crypt::decryptString($value) : null;
+    } catch (\Exception $e) {
+        Log::error("Error desencriptando CBU: ".$e->getMessage());
+        return null;
+    }
 }
 
 public function getCbuMaskedAttribute()
 {
-    $cbu = $this->cbu;
-    return $cbu ? substr($cbu, 0, 4) . str_repeat('•', 14) . substr($cbu, -4) : null;
+    if (!$this->cbu) return null;
+    return substr($this->cbu, 0, 4).str_repeat('•', 14).substr($this->cbu, -4);
 }
 
 public function hasValidCbu()
