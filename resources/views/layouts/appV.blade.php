@@ -12,41 +12,46 @@
     
     <!-- Favicon -->
     <link rel="icon" href="{{ asset('img/favicon.ico') }}">
-    
+
     <!-- CSS de DataTables -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" crossorigin="anonymous">
-    
+
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    
+
     <!-- AdminLTE CSS -->
-    <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.3.0/dist/js/adminlte.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css" crossorigin="anonymous">
+
     <!-- Iconos -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous">
+
+    @vite([
+        'resources/css/app.scss',
+        'resources/css/paneles/rrhh-valentina.scss',
+        'resources/js/app.js'
+    ])
     
-    @vite(['resources/css/app.scss', 'resources/css/paneles/rrhh-valentina.scss'])
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
     @yield('content')
-    
-    <!-- jQuery -->
+
+    <!-- jQuery (debe ir primero) -->
     <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
-    
+
     <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-    
-    <!-- AdminLTE JS -->
-    <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.3.0/dist/js/adminlte.min.js" 
-        integrity="sha512-3CHQy6Z/1qE8WLVqAf0IhGkqucgoJk3v8h+YNPjqBjb+2L5xVYp6vxwD6eHl7ZHlP5H3k4bqC7nNLL6W2W5w==" 
-        crossorigin="anonymous"></script>
-    
+
+    <!-- AdminLTE JS (Debe ir después de jQuery) -->
+    <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
+
     <!-- DataTables -->
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js" crossorigin="anonymous"></script>
+
     <!-- Vite -->
     @vite(['resources/js/app.js', 'resources/js/paneles/rrhh-valentina.js'])
-    
+
     <!-- Scripts específicos -->
     @stack('scripts')
 
