@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <meta name="description" content="Panel de Gestión RRHH - OCE">
     <meta name="author" content="OCE ingenieria y mantenimiento">
     <meta name="robots" content="noindex, nofollow">
@@ -11,76 +10,99 @@
     <title>@yield('title', 'OCE - RRHH')</title>
     
     <!-- Favicon -->
-    <link rel="icon" href="{{ asset('img/favicon.ico') }}">
+    <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
 
-    <!-- CSS de DataTables -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" crossorigin="anonymous">
+    <!-- CDN CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2.0/dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-
-    <!-- AdminLTE CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css" crossorigin="anonymous">
-
-    <!-- Iconos -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous">
-
+    <!-- Vite CSS -->
     @vite([
         'resources/css/app.scss',
-        'resources/css/paneles/rrhh-valentina.scss',
-        'resources/js/app.js'
+        'resources/css/paneles/rrhh-valentina.scss'
     ])
-    
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
     @yield('content')
 
-    <!-- jQuery (debe ir primero) -->
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+    <!-- Scripts Externos (ORDEN CRÍTICO) -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <!-- AdminLTE debe ir DESPUÉS de Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2.0/dist/js/adminlte.min.js"></script>
 
-    <!-- Bootstrap JS Bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-
-    <!-- AdminLTE JS (Debe ir después de jQuery) -->
-    <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
-
-    <!-- DataTables -->
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js" crossorigin="anonymous"></script>
-
-    <!-- Vite -->
-    @vite(['resources/js/app.js', 'resources/js/paneles/rrhh-valentina.js'])
-
-    <!-- Scripts específicos -->
-    @stack('scripts')
-
-    <!-- Inicialización segura SIN MODIFICAR TU LÓGICA -->
+    <!-- Solución Nuclear para Modales -->
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Solución para error _config de Bootstrap
-        if (typeof bootstrap !== 'undefined') {
-            document.querySelectorAll('[data-bs-toggle="modal"]').forEach(button => {
-                button.addEventListener('click', function() {
-                    var target = this.getAttribute('data-bs-target');
-                    var modal = bootstrap.Modal.getInstance(document.querySelector(target));
-                    if (!modal) {
-                        new bootstrap.Modal(document.querySelector(target)).show();
-                    }
-                });
-            });
-        }
-
-        // Inicialización segura de AdminLTE
-        if (typeof $.AdminLTE !== 'undefined') {
-            $.AdminLTE.layout.activate();
-            if ($.AdminLTE.tree) {
-                $('[data-widget="treeview"]').each(function() {
-                    $.AdminLTE.tree(this);
-                });
+    // 1. Parche para AdminLTE + Bootstrap 5
+    (function() {
+        const originalModal = bootstrap.Modal;
+        
+        bootstrap.Modal = class extends originalModal {
+            constructor(element, config) {
+                // Configuración segura con valores por defecto
+                const safeConfig = {
+                    backdrop: (config && config.backdrop) || 'static',
+                    keyboard: (config && config.keyboard) || false,
+                    focus: (config && config.focus) || true,
+                    ...config
+                };
+                
+                super(element, safeConfig);
             }
+            
+            _initializeBackDrop() {
+                this._config = this._config || {};
+                this._config.backdrop = this._config.backdrop === undefined ? true : this._config.backdrop;
+                super._initializeBackDrop();
+            }
+        };
+    })();
+
+    // 2. Inicialización segura
+    document.addEventListener('DOMContentLoaded', function() {
+        // Función global para abrir modales
+        window.iniciarModal = function(button) {
+            const target = button.getAttribute('data-bs-target');
+            const modal = document.querySelector(target);
+            
+            if (modal) {
+                // Destruye instancia previa si existe
+                const existingModal = bootstrap.Modal.getInstance(modal);
+                if (existingModal) existingModal.dispose();
+                
+                // Crea nueva instancia con configuración segura
+                new bootstrap.Modal(modal, {
+                    backdrop: 'static',
+                    keyboard: false
+                }).show();
+            }
+        };
+
+        // Asigna eventos a los botones existentes
+        document.querySelectorAll('[data-bs-toggle="modal"]').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                iniciarModal(this);
+            });
+        });
+
+        // Inicialización de AdminLTE (si es necesario)
+        if (typeof $ !== 'undefined' && $.fn.Treeview) {
+            $('[data-widget="treeview"]').Treeview();
         }
     });
     </script>
+
+    <!-- Vite JS -->
+    @vite([
+        'resources/js/app.js',
+        'resources/js/paneles/rrhh-valentina.js'
+    ])
+
+    @stack('scripts')
 </body>
 </html>

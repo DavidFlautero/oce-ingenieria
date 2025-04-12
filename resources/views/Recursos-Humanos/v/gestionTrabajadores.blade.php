@@ -18,9 +18,9 @@
         <section class="content p-4">
             <div class="container-fluid">
                 {{-- Botón Nuevo Empleado (se mantiene igual) --}}
-                <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalGestionEmpleado">
-                    <i class="fas fa-user-plus me-2"></i> Nuevo Empleado
-                </button>
+                <button class="btn btn-primary mb-3" onclick="iniciarModal(this)" data-bs-target="#modalGestionEmpleado">
+    <i class="fas fa-user-plus me-2"></i> Nuevo Empleado
+</button>
 
                 {{-- Tabla Empleados Actualizada --}}
                 <div class="card">

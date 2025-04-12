@@ -1,7 +1,31 @@
+// Tailwind CSS - Orden CRÍTICO
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-// IMPORTÁS EL DE VALENTINA
-@import 'paneles/rrhh-valentina';
+// Variables y mixins primero
+@import 'variables';
+@import 'mixins';
+
+// Bootstrap (solo componentes necesarios)
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+@import '~bootstrap/scss/mixins';
+@import '~bootstrap/scss/utilities';
+@import '~bootstrap/scss/root';
+@import '~bootstrap/scss/reboot';
+@import '~bootstrap/scss/containers';
+@import '~bootstrap/scss/grid';
+
+// AdminLTE (solo lo esencial)
+@import '~admin-lte/build/scss/AdminLTE-raw';
+
+// DataTables (estilos BS5)
+@import '~datatables.net-bs5/css/dataTables.bootstrap5';
+
+// Componentes personalizados (orden jerárquico)
 @import 'navbar';
+@import 'paneles/rrhh-valentina';
+
+// Utilidades finales (siempre al final)
+@import 'utilities';

@@ -1,13 +1,11 @@
-// empleados.js - Versión optimizada para Bootstrap 5
+// empleados.js - Versión optimizada y corregida
 
 // Verificar carga de Bootstrap
 if (typeof bootstrap === 'undefined') {
     console.error('Bootstrap no está cargado correctamente');
 }
 
-/**
- * Función principal para guardar empleados
- */
+// Función principal para guardar empleados
 async function guardarEmpleado(event) {
     event.preventDefault();
     
@@ -37,55 +35,103 @@ async function guardarEmpleado(event) {
             const modal = bootstrap.Modal.getInstance(document.getElementById('modalGestionEmpleado'));
             modal.hide();
             setTimeout(() => window.location.reload(), 1000);
-            alert('Empleado guardado correctamente');
+            Swal.fire('Éxito', 'Empleado guardado correctamente', 'success');
         }
     } catch (error) {
         console.error("Error:", error);
-        alert(`Error: ${error.message}`);
+        Swal.fire('Error', error.message, 'error');
     }
 }
 
-/**
- * Eventos del Modal
- */
+// Eventos del DOM
 document.addEventListener('DOMContentLoaded', () => {
+    // Inicialización del modal
     const modalEl = document.getElementById('modalGestionEmpleado');
-    if (!modalEl) return;
+    if (modalEl) {
+        // Limpiar formulario al cerrar
+        modalEl.addEventListener('hidden.bs.modal', () => {
+            const form = document.getElementById('formEmpleado');
+            if (form) {
+                form.reset();
+                form.classList.remove('was-validated');
+            }
+        });
 
-    // Limpiar formulario al cerrar
-    modalEl.addEventListener('hidden.bs.modal', () => {
-        const form = document.getElementById('formEmpleado');
-        if (form) {
-            form.reset();
-            form.classList.remove('was-validated');
+        // Cargar áreas al abrir
+        modalEl.addEventListener('show.bs.modal', () => {
+            fetch('/empleados/areas')
+                .then(response => response.json())
+                .then(areas => {
+                    const select = document.getElementById('area');
+                    if (select) {
+                        select.innerHTML = areas.map(area => 
+                            `<option value="${area.id}">${area.nombre}</option>`
+                        ).join('') + '<option value="nueva_area">+ Crear Nueva Área</option>';
+                    }
+                });
+        });
+    }
+
+    // Gestión de áreas
+    document.getElementById('area')?.addEventListener('change', function() {
+        if (this.value === 'nueva_area') {
+            const nombre = prompt('Nombre de la nueva área:');
+            if (nombre) crearNuevaArea(nombre);
+        } else {
+            cargarCargos(this.value);
         }
     });
 
-    // Cargar áreas al abrir
-    modalEl.addEventListener('show.bs.modal', () => {
-        fetch('/empleados/areas')
-            .then(response => response.json())
-            .then(areas => {
-                const select = document.getElementById('area');
-                select.innerHTML = areas.map(area => 
-                    `<option value="${area.id}">${area.nombre}</option>`
-                ).join('');
+    // Manejo CBU con jQuery (compatibilidad)
+    $(document).on('click', '.btn-view-cbu', async function() {
+        const btn = $(this);
+        try {
+            btn.html('<i class="fas fa-spinner fa-spin"></i>');
+            
+            const empleadoId = btn.data('id');
+            const response = await fetch(`/empleados/${empleadoId}/cbu?action=masked`);
+            const data = await response.json();
+            
+            if (!response.ok) throw new Error(data.error);
+
+            const { value: password } = await Swal.fire({
+                title: 'Verificación',
+                html: `<input type="password" id="swal-password" class="form-control" placeholder="Contraseña" required>`,
+                showCancelButton: true,
+                focusConfirm: false,
+                preConfirm: () => {
+                    const pass = $('#swal-password').val();
+                    if (!pass) Swal.showValidationMessage('Requerido');
+                    return { password: pass };
+                }
             });
+
+            if (password) {
+                const fullResponse = await fetch(`/empleados/${empleadoId}/cbu?action=full`, {
+                    method: 'POST',
+                    headers: { 
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(password)
+                });
+                
+                const fullData = await fullResponse.json();
+                if (!fullResponse.ok) throw new Error(fullData.error);
+                
+                $(`#cbu-masked-${empleadoId}`).text(fullData.full_cbu); 
+                btn.hide();
+                $(`.btn-copy-cbu[data-id="${empleadoId}"]`).show();
+            }
+        } catch (error) {
+            Swal.fire('Error', error.message, 'error');
+        } finally {
+            btn.html('<i class="fas fa-eye"></i>');
+        }
     });
 });
 
-/**
- * Gestión de Áreas y Cargos
- */
-document.getElementById('area')?.addEventListener('change', function() {
-    if (this.value === 'nueva_area') {
-        const nombre = prompt('Nombre de la nueva área:');
-        if (nombre) crearNuevaArea(nombre);
-    } else {
-        cargarCargos(this.value);
-    }
-});
-
+// Funciones auxiliares
 function crearNuevaArea(nombre) {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
 
@@ -101,7 +147,7 @@ function crearNuevaArea(nombre) {
         const data = await response.json();
         if (!response.ok) throw new Error(data.error || 'Error al crear área');
         
-        alert('Área creada!');
+        Swal.fire('Éxito', 'Área creada correctamente', 'success');
         const modal = bootstrap.Modal.getInstance(document.getElementById('modalGestionEmpleado'));
         modal.hide();
         
@@ -110,13 +156,15 @@ function crearNuevaArea(nombre) {
             .then(res => res.json())
             .then(areas => {
                 const select = document.getElementById('area');
-                select.innerHTML = areas.map(a => 
-                    `<option value="${a.id}">${a.nombre}</option>`
-                ).join('');
-                modal.show();
+                if (select) {
+                    select.innerHTML = areas.map(a => 
+                        `<option value="${a.id}">${a.nombre}</option>`
+                    ).join('') + '<option value="nueva_area">+ Crear Nueva Área</option>';
+                    modal.show();
+                }
             });
     })
-    .catch(error => alert(`Error: ${error.message}`));
+    .catch(error => Swal.fire('Error', error.message, 'error'));
 }
 
 function cargarCargos(areaId) {
@@ -124,55 +172,10 @@ function cargarCargos(areaId) {
         .then(response => response.json())
         .then(cargos => {
             const select = document.getElementById('cargo');
-            select.innerHTML = cargos.map(cargo => 
-                `<option value="${cargo.id}">${cargo.nombre}</option>`
-            ).join('');
-        });
-}
-
-/**
- * Manejo CBU (compatible con jQuery existente)
- */
-$(document).on('click', '.btn-view-cbu', async function() {
-    const btn = $(this);
-    try {
-        btn.html('<i class="fas fa-spinner fa-spin"></i>');
-        
-        const empleadoId = btn.data('id');
-        const response = await fetch(`/empleados/${empleadoId}/cbu?action=masked`);
-        const data = await response.json();
-        
-        if (!response.ok) throw new Error(data.error);
-
-        const { value: password } = await Swal.fire({
-            title: 'Verificación',
-            html: `<input type="password" class="form-control" placeholder="Contraseña" required>`,
-            showCancelButton: true,
-            preConfirm: () => {
-                const pass = $('#swal-password').val();
-                if (!pass) Swal.showValidationMessage('Requerido');
-                return { password: pass };
+            if (select) {
+                select.innerHTML = cargos.map(cargo => 
+                    `<option value="${cargo.id}">${cargo.nombre}</option>`
+                ).join('');
             }
         });
-
-        if (password) {
-            const fullResponse = await fetch(`/empleados/${empleadoId}/cbu?action=full`, {
-                method: 'POST',
-                headers: { 
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(password)
-            });
-            
-            const fullData = await fullResponse.json();
-            if (!fullResponse.ok) throw new Error(fullData.error);
-            
-            $(`.cbu-value[data-id="${empleadoId}"]`).text(fullData.cbu);
-        }
-    } catch (error) {
-        Swal.fire('Error', error.message, 'error');
-    } finally {
-        btn.html('<i class="fas fa-eye"></i>');
-    }
-});
+}

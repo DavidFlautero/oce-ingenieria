@@ -1,6 +1,6 @@
 <!-- Modal Nuevo/Editar Empleado COMPLETO -->
-<div class="modal fade" id="modalGestionEmpleado" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-xl">
+<!-- Cambiar el div del modal (línea 1) -->
+<div class="modal fade" id="modalGestionEmpleado" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true" data-bs-backdrop="static">    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header bg-primary text-white">
                 <h5 class="modal-title">
@@ -303,45 +303,44 @@
 </div>
 
 <!-- Script para Monotributo -->
+<!-- Scripts optimizados - Reemplazar desde @push('scripts') hasta @endpush -->
 @push('scripts')
 <script>
-    document.getElementById('relacionLaboral').addEventListener('change', function() {
-        const seccion = document.getElementById('seccionMonotributo');
-        if(this.value === 'monotributista') {
-            seccion.classList.remove('d-none');
-        } else {
-            seccion.classList.add('d-none');
-        }
-    });
-    
-  function mostrarInputNuevaArea(select) {
-    const inputContainer = document.getElementById('input-nueva-area');
-    const nuevaAreaInput = document.getElementById('nueva-area-input');
-    
-    // Verificamos que los elementos existan
-    if (!inputContainer || !nuevaAreaInput) return;
-    
-    if (select.value === 'nueva_area') {
-        // 1. Mostrar con animación (usando clase CSS)
-        inputContainer.classList.add('show');
-        // 2. Campo requerido
-        nuevaAreaInput.required = true;
-        // 3. Autofocus para mejor UX
-        nuevaAreaInput.focus();
-    } else {
-        // 1. Ocultar con animación
-        inputContainer.classList.remove('show');
-        // 2. Campo no requerido
-        nuevaAreaInput.required = false;
-    }
-}
-</script>
-<!-- Manejo de Fecha formato DIA/MES AÑO -->
-<script>
 document.addEventListener('DOMContentLoaded', function() {
+    // 1. Monotributo Show/Hide
+    const relacionLaboral = document.getElementById('relacionLaboral');
+    if (relacionLaboral) {
+        relacionLaboral.addEventListener('change', function() {
+            const seccion = document.getElementById('seccionMonotributo');
+            if (this.value === 'monotributista') {
+                seccion.classList.remove('d-none');
+            } else {
+                seccion.classList.add('d-none');
+            }
+        });
+    }
+
+    // 2. Nueva Área Logic
+    function mostrarInputNuevaArea(select) {
+        const inputContainer = document.getElementById('input-nueva-area');
+        const nuevaAreaInput = document.getElementById('nueva-area-input');
+        
+        if (!inputContainer || !nuevaAreaInput) return;
+        
+        if (select.value === 'nueva_area') {
+            inputContainer.style.display = 'block';
+            nuevaAreaInput.required = true;
+            nuevaAreaInput.focus();
+        } else {
+            inputContainer.style.display = 'none';
+            nuevaAreaInput.required = false;
+        }
+    }
+
+    // 3. Date Format Handling (Versión Mejorada)
     document.querySelectorAll('input[type="date"]').forEach(input => {
         input.addEventListener('focus', (e) => {
-            if (e.target.value) {
+            if (e.target.value && e.target.value.match(/^\d{4}-\d{2}-\d{2}$/)) {
                 const [year, month, day] = e.target.value.split('-');
                 e.target.value = `${day}/${month}/${year}`;
             }
@@ -350,10 +349,20 @@ document.addEventListener('DOMContentLoaded', function() {
         input.addEventListener('blur', (e) => {
             if (e.target.value.includes('/')) {
                 const [day, month, year] = e.target.value.split('/');
-                e.target.value = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+                if (day && month && year) {
+                    e.target.value = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+                }
             }
         });
     });
+
+    // Inicialización del select de área
+    const areaSelect = document.getElementById('area');
+    if (areaSelect) {
+        areaSelect.addEventListener('change', function() {
+            mostrarInputNuevaArea(this);
+        });
+    }
 });
 </script>
 @endpush
