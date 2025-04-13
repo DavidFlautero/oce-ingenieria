@@ -6,8 +6,7 @@ export default defineConfig({
         laravel({
             input: [
                 'resources/css/app.scss',
-                'resources/js/app.js',
-                'resources/js/paneles/rrhh-valentina.js'
+                'resources/js/app.js'
             ],
             refresh: true,
         }),

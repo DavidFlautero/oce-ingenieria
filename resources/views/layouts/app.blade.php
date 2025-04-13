@@ -141,7 +141,7 @@
     @livewireScripts
 
     <!-- Vite JS -->
-    @vite(['resources/js/app.js', 'resources/js/paneles/rrhh-valentina.js'])
+    @vite('resources/js/app.js')
 
     @stack('scripts')
 </body>
