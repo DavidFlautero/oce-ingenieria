@@ -8,6 +8,9 @@ use App\Models\Area;
 use App\Models\Cargo;
 use App\Models\Documento;
 use Illuminate\Support\Facades\Storage;
+use Yajra\DataTables\DataTables;
+
+
 
 class RRHHController extends Controller
 {
@@ -170,6 +173,20 @@ public function manejarCbu(Request $request, $id)
         }
     }
 
+		public function lista(Request $request)
+{
+    if ($request->ajax()) {
+        $empleados = Empleado::select(['id', 'nombre', 'email', 'cargo']); // Asegurate de que estos campos existen
+        return DataTables::of($empleados)
+            ->addColumn('acciones', function ($empleado) {
+                return '<button class="btn btn-sm btn-warning">Editar</button>';
+            })
+            ->rawColumns(['acciones'])
+            ->make(true);
+    }
+
+    return response()->json(['message' => 'Solicitud inválida'], 400);
+}
     public function crearArea(Request $request) 
     {
         $request->validate([

@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\RRHHController;
+use App\Http\Controllers\EmpleadoController;
 use App\Http\Controllers\CBUController;
 use Illuminate\Support\Facades\Route;
 
@@ -31,7 +31,7 @@ Route::middleware(['auth'])->group(function () {
     })->name('dashboard');
 
     // Vista de gestión de trabajadores
-    Route::get('/recursos-humanos/gestion-trabajadores', [RRHHController::class, 'gestionTrabajadores'])
+    Route::get('/recursos-humanos/gestion-trabajadores', [EmpleadoController::class, 'gestionTrabajadores'])
         ->name('rrhh.gestion-trabajadores');
 
     // Perfil usuario
@@ -40,18 +40,18 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // API RRHH
-    Route::post('/empleados/guardar', [RRHHController::class, 'guardarEmpleado'])
+    Route::post('/empleados/guardar', [EmpleadoController::class, 'guardarEmpleado'])
         ->name('empleados.guardar');
     
-    Route::get('/empleados/areas', [RRHHController::class, 'obtenerAreas']);
-    Route::get('/empleados/cargos/{area}', [RRHHController::class, 'obtenerCargos']);
-    Route::post('/empleados/crear-area', [RRHHController::class, 'crearArea']);
-    Route::get('/empleados/{id}', [RRHHController::class, 'obtenerEmpleado']);
-    Route::post('/empleados/subir-documento', [RRHHController::class, 'subirDocumento']);
+    Route::get('/empleados/areas', [EmpleadoController::class, 'obtenerAreas']);
+    Route::get('/empleados/cargos/{area}', [EmpleadoController::class, 'obtenerCargos']);
+    Route::post('/empleados/crear-area', [EmpleadoController::class, 'crearArea']);
+    Route::get('/empleados/{id}', [EmpleadoController::class, 'obtenerEmpleado']);
+    Route::post('/empleados/subir-documento', [EmpleadoController::class, 'subirDocumento']);
 });
 
 // Rutas CBU
-Route::post('/empleados/{empleado}/cbu', [RRHHController::class, 'manejarCbu'])
+Route::post('/empleados/{empleado}/cbu', [EmpleadoController::class, 'manejarCbu'])
     ->middleware('auth')
     ->name('empleados.cbu');
 
@@ -60,5 +60,8 @@ Route::get('/empleados/{empleado}/cbu', [CBUController::class, 'showMasked'])
 
 Route::post('/empleados/{empleado}/cbu/full', [CBUController::class, 'showFull'])
     ->middleware(['auth', 'password.confirm']);
+	
+	Route::get('/empleados/lista', [EmpleadoController::class, 'lista'])->name('empleados.lista');
+
 
 require __DIR__.'/auth.php';

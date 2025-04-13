@@ -1,5 +1,4 @@
 // resources/js/app.js
-
 import './bootstrap';
 import '../css/app.scss';
 import Alpine from 'alpinejs';
@@ -17,8 +16,13 @@ Livewire.start();
 
 // Inicializa RRHH cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', () => {
-    new EmpleadosRRHH();
+    window.rrhhApp = new EmpleadosRRHH();
     
     // Tooltips globales
     $('[data-bs-toggle="tooltip"]').tooltip();
+    
+    // Exporta funciones globales para usar en HTML
+    window.abrirModalNuevo = () => window.rrhhApp.abrirModalNuevo();
+    window.abrirModalEditar = (id) => window.rrhhApp.abrirModalEditar(id);
+    window.iniciarBaja = (id) => window.rrhhApp.iniciarBaja(id);
 });

@@ -8,7 +8,7 @@
     "devDependencies": {
         "@tailwindcss/forms": "^0.5.2",
         "@tailwindcss/vite": "^4.0.0",
-        "alpinejs": "^3.4.2",
+        "alpinejs": "^3.14.9",
         "autoprefixer": "^10.4.2",
         "axios": "^1.8.2",
         "concurrently": "^9.0.1",
@@ -22,6 +22,7 @@
         "admin-lte": "^4.0.0-beta3",
         "bootstrap": "^5.3.5",
         "jquery": "^3.7.1",
+        "livewire": "^0.6.1",
         "sass": "^1.86.3"
     }
 }
